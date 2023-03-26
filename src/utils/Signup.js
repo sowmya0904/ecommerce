@@ -10,10 +10,10 @@ export default async function CreateUser(data) {
         lastName: data.lname,
         contactNumber: data.mobile,
       });
-      return r.data;
+      return r.status;
     } catch (e) {
-      if (e.response && e.response.data) {
-        return e.response.data;
+      if (e.response && e.response.status) {
+        return e.response.status;
       }
     } finally {
       console.log(`Finally Signup called`);

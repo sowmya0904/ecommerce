@@ -8,6 +8,7 @@ import * as React from "react";
 import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import ButtonUI from "../../common/ButtonUI";
 import NavBar from "../../common/NavBar";
 import EmailValidator from "../../utils/EmailValidator";
@@ -83,7 +84,11 @@ const SignUp = () => {
       role: !admin ? "user" : "admin",
     });
     setdone(true);
-    setMessage(create_feedback?.message);
+    if (create_feedback !== 200) {
+      toast.error("User already exist with same email address");
+      return;
+    }
+    toast.success("User Registered Successfully !");
 
     setFirstName("");
     setLastName("");
@@ -91,6 +96,9 @@ const SignUp = () => {
     setPassword("");
     setEmail("");
     setconfirmpassword("");
+    setTimeout(() => {
+      navigation("/signin");
+    }, 2000);
   };
 
   return (
@@ -102,7 +110,7 @@ const SignUp = () => {
         </Typography>
         <ButtonUI
           type="button"
-          onClick={() => {      
+          onClick={() => {
             navigation("/signin");
           }}
         >
@@ -209,7 +217,7 @@ const SignUp = () => {
                 !lastName ||
                 !password ||
                 !confirmpassword ||
-                !contactNumber ||
+                contactNumber.length < 10 ||
                 !email
                   ? true
                   : false
@@ -232,13 +240,8 @@ const SignUp = () => {
             </Link>
           </Col>
         </Row>
-        <Snackbar
-          open={done}
-          autoHideDuration={6000}
-          message={message}
-          action={null}
-        />
       </div>
+      <ToastContainer />
     </>
   );
 };
